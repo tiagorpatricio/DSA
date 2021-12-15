@@ -13,8 +13,9 @@ const forLoopSolution = (nums, numToFind) => {
 
 console.log(forLoopSolution(EXERCISE_NUMS, MATCH_NUM));
 
-//Using Recursion (helper method recursion);
 
+
+//Using Recursion (helper method recursion);
 const linearSearch = (nums, numToFind) => {
   let counter = 0;
 
