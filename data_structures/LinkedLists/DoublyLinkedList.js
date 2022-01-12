@@ -94,17 +94,44 @@ class DoublyLinkedList {
       return current;
     }
   }
+
+  set(val, index) {
+    if (index < 0 || inde > this.length - 1) return undefined;
+    currentNode = get(index);
+    if (!currentNode) return false;
+    currentNode.val = val;
+    return true;
+  }
+
+  insertInto(val, index) {
+    if (index < 0 || index > this.length - 1) return undefined;
+    let node = new Node(val);
+    let prevNode = this.get(index - 1);
+    let nextNode = this.get(index);
+    if (!prevNode) return this.unshift(val);
+    if (!nextNode) return this.push(val);
+    prevNode.next = node;
+    node.prev = prevNode;
+    node.next = nextNode;
+    nextNode.prev = node;
+    this.length++;
+    this.length++;
+    return this;
+  }
+
+  remove(index) {
+    if (index < 0 || index > this.length - 1) return undefined;
+    if (index === 0) return this.shift();
+    if (index === this.length) return this.pop();
+    let node = this.get(index);
+
+    node.next.prev = node.prev;
+    node.prev.next = node.next;
+    node.prev = null;
+    node.next = null;
+    this.length--;
+
+    return node;
+  }
 }
 
-let list = new DoublyLinkedList();
-list.push(1);
-list.push(2);
-list.push(3);
-list.push(4);
-list.push(5);
-list.push(6);
-list.push(7);
-list.push(8);
-list.push(9);
-
-console.log(list.get(5));
