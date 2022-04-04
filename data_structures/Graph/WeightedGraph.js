@@ -1,4 +1,5 @@
-class Graph {
+const PriorityQueue = require("../PriorityQueue");
+class WeightedGraph {
     constructor() {
         this.adjacencyList = {};
     }
@@ -10,9 +11,9 @@ class Graph {
     }
 
     //undirected graph
-    addEdge(vertex1, vertex2) {
-        this.adjacencyList[vertex1].push(vertex2);
-        this.adjacencyList[vertex2].push(vertex1);
+    addEdge(vertex1, vertex2, weight) {
+        this.adjacencyList[vertex1].push({ node: vertex2, weight });
+        this.adjacencyList[vertex2].push({ node: vertex1, weight });
     }
 
     removeVertex(vertex) {
@@ -86,4 +87,54 @@ class Graph {
         }
         return result;
     }
+
+    //Dijkstra's Algorith -- Find the shortest path betweent two vertexs
+    DijkstrasAlgorithm = (startVertex, endVertex) => {
+        const distances = {};
+        const queue = new PriorityQueue();
+        const previous = {};
+        let currentVertex;
+
+        for (let vertex in this.adjacencyList) {
+            if (vertex === startVertex) {
+                distances[vertex] = 0;
+                queue.enqueue(vertex, 0);
+            } else {
+                distances[vertex] = Infinity;
+                queue.enqueue(vertex, Infinity);
+            }
+
+            previous[vertex] = null;
+        }
+
+        while (queue.values.length) {
+            currentVertex = queue.dequeue().val;
+            if (currentVertex === endVertex) return;
+
+            if (currentVertex || distances[currentVertex] !== Infinity) {
+                for (let closeNode in this.adjacencyList[currentVertex]) {
+                    let nextNode = this.adjacencyList[currentVertex][closeNode];
+                }
+            }
+        }
+    };
 }
+
+const graph = new WeightedGraph();
+graph.addVertex("A");
+graph.addVertex("B");
+graph.addVertex("C");
+graph.addVertex("D");
+graph.addVertex("E");
+graph.addVertex("F");
+
+graph.addEdge("A", "B", 4);
+graph.addEdge("A", "C", 2);
+graph.addEdge("B", "E", 3);
+graph.addEdge("C", "D", 2);
+graph.addEdge("C", "F", 4);
+graph.addEdge("D", "E", 3);
+graph.addEdge("D", "F", 1);
+graph.addEdge("E", "F", 1);
+
+graph.DijkstrasAlgorithm("A", "E");
