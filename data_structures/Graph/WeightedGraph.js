@@ -93,6 +93,7 @@ class WeightedGraph {
         const distances = {};
         const queue = new PriorityQueue();
         const previous = {};
+        const path = [];
         let currentVertex;
 
         for (let vertex in this.adjacencyList) {
@@ -109,14 +110,33 @@ class WeightedGraph {
 
         while (queue.values.length) {
             currentVertex = queue.dequeue().val;
-            if (currentVertex === endVertex) return;
+            if (currentVertex === endVertex) {
+                while (previous[currentVertex]) {
+                    path.push(currentVertex);
+                    currentVertex = previous[currentVertex];
+                }
+                break;
+            }
 
             if (currentVertex || distances[currentVertex] !== Infinity) {
                 for (let closeNode in this.adjacencyList[currentVertex]) {
+                    //find neighbor node
                     let nextNode = this.adjacencyList[currentVertex][closeNode];
+                    // calculate new distance to neighbor node;
+                    let candidate = distances[currentVertex] + nextNode.weight;
+                    if (candidate < distances[nextNode.node]) {
+                        //update new smallest distance to neighbor
+                        distances[nextNode.node] = candidate;
+                        //update previous
+                        previous[nextNode.node] = currentVertex;
+                        //enqueue in priority queue
+                        queue.enqueue(nextNode.node, candidate);
+                    }
                 }
             }
         }
+
+        return path.concat(currentVertex).reverse();
     };
 }
 
@@ -137,4 +157,4 @@ graph.addEdge("D", "E", 3);
 graph.addEdge("D", "F", 1);
 graph.addEdge("E", "F", 1);
 
-graph.DijkstrasAlgorithm("A", "E");
+console.log(graph.DijkstrasAlgorithm("A", "C"));
